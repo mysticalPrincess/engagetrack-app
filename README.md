@@ -22,9 +22,10 @@ A Flask-based web application that uses YOLOv11 for real-time student engagement
 ## Installation
 
 ### 1. Clone the Repository
+https://github.com/mysticalPrincess/engagetrack-app
 
 \`\`\`bash
-git clone <your-repo-url>
+git clone mysticalPrincess/engagetrack-app
 cd engagetrack
 \`\`\`
 
