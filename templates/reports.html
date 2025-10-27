@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+{% set show_nav = True %}
+{% set active_page = 'reports' %}
+
+{% block styles %}
+<style>
+    .reports-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .reports-title {
+        font-size: 2rem;
+        color: #60a5fa;
+        margin-bottom: 0.5rem;
+    }
+
+    .sessions-list {
+        margin-bottom: 2rem;
+    }
+
+    .session-item {
+        background-color: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .session-item:hover {
+        border-color: #60a5fa;
+        transform: translateY(-2px);
+    }
+
+    .session-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .session-date {
+        font-size: 1.125rem;
+        color: #60a5fa;
+        font-weight: 500;
+    }
+
+    .session-duration {
+        color: #9ca3af;
+        font-size: 0.875rem;
+    }
+
+    .session-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+
+    .session-stat {
+        text-align: center;
+    }
+
+    .session-stat-label {
+        color: #9ca3af;
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .session-stat-value {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #60a5fa;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #9ca3af;
+    }
+
+    .session-details {
+        background-color: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        display: none;
+    }
+
+    .session-details.active {
+        display: block;
+    }
+
+    .student-list {
+        margin-top: 1rem;
+    }
+
+    .student-item {
+        background-color: #374151;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .student-id {
+        color: #60a5fa;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .student-snapshots {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+
+    .snapshot-card {
+        background-color: #374151;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .snapshot-img {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        border-radius: 0.5rem;
+        margin-bottom: 0.5rem;
+        border: 2px solid #60a5fa;
+    }
+
+    .snapshot-label {
+        color: #60a5fa;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="reports-header">
+        <h1 class="reports-title">Reports & History</h1>
+    </div>
+
+    <div class="card sessions-list">
+        <div class="card-title">Your Past Sessions</div>
+        <div id="sessionsList">
+            <div class="empty-state">
+                No sessions recorded yet. Start a session on the Live Detection page!
+            </div>
+        </div>
+    </div>
+
+    <div class="card session-details" id="sessionDetails">
+        <div class="card-title">Session Details</div>
+        <div id="detailsContent">
+            Select a session from the list to view its details.
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    async function loadSessions() {
+        const response = await fetch('/past_sessions');
+        const data = await response.json();
+        
+        const sessionsList = document.getElementById('sessionsList');
+        
+        if (data.sessions && data.sessions.length > 0) {
+            sessionsList.innerHTML = data.sessions.map(session => `
+                <div class="session-item" onclick="loadSessionDetails(${session.id})">
+                    <div class="session-header">
+                        <div class="session-date">${session.start_time}</div>
+                        <div class="session-duration">${formatDuration(session.duration)}</div>
+                    </div>
+                    <div class="session-stats">
+                        <div class="session-stat">
+                            <div class="session-stat-label">Students</div>
+                            <div class="session-stat-value">${session.students}</div>
+                        </div>
+                        <div class="session-stat">
+                            <div class="session-stat-label">Engaged</div>
+                            <div class="session-stat-value" style="color: #60a5fa;">${session.engaged}%</div>
+                        </div>
+                        <div class="session-stat">
+                            <div class="session-stat-label">Neutral</div>
+                            <div class="session-stat-value" style="color: #2563eb;">${session.neutral}%</div>
+                        </div>
+                        <div class="session-stat">
+                            <div class="session-stat-label">Bored</div>
+                            <div class="session-stat-value" style="color: #c95d5e;">${session.bored}%</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
+    async function loadSessionDetails(sessionId) {
+        const response = await fetch(`/session_details/${sessionId}`);
+        const data = await response.json();
+        
+        const detailsContent = document.getElementById('detailsContent');
+        const sessionDetails = document.getElementById('sessionDetails');
+        
+        if (data.session) {
+            const session = data.session;
+            const studentData = data.student_data;
+            const studentImages = data.student_images || {};
+            
+            // Build student snapshots section
+            let snapshotsHtml = '';
+            if (Object.keys(studentImages).length > 0) {
+                snapshotsHtml = '<div style="margin-bottom: 1.5rem;"><h3 style="color: #60a5fa; margin-bottom: 1rem;">Student Snapshots</h3><div class="student-snapshots">';
+                for (const [studentId, imagePath] of Object.entries(studentImages)) {
+                    snapshotsHtml += `
+                        <div class="snapshot-card">
+                            <img src="/static/${imagePath}" alt="Student ${studentId}" class="snapshot-img">
+                            <div class="snapshot-label">Student ID: ${studentId}</div>
+                        </div>
+                    `;
+                }
+                snapshotsHtml += '</div></div>';
+            }
+            
+            let studentsHtml = '';
+            for (const [studentId, detections] of Object.entries(studentData)) {
+                const states = detections.map(d => d.state);
+                const engaged = states.filter(s => s === 'engaged').length;
+                const neutral = states.filter(s => s === 'neutral').length;
+                const bored = states.filter(s => s === 'bored' || s === 'sleepy').length;
+                const total = states.length;
+                
+                studentsHtml += `
+                    <div class="student-item">
+                        <div class="student-id">Student ID: ${studentId}</div>
+                        <div style="font-size: 0.875rem; color: #9ca3af;">
+                            Engaged: ${Math.round(engaged/total*100)}% | 
+                            Neutral: ${Math.round(neutral/total*100)}% | 
+                            Bored: ${Math.round(bored/total*100)}%
+                        </div>
+                    </div>
+                `;
+            }
+            
+            detailsContent.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="color: #60a5fa; margin-bottom: 1rem;">Session Overview</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                        <div>
+                            <div style="color: #9ca3af; font-size: 0.875rem;">Start Time</div>
+                            <div style="color: white; font-size: 1.125rem;">${session.start_time}</div>
+                        </div>
+                        <div>
+                            <div style="color: #9ca3af; font-size: 0.875rem;">Duration</div>
+                            <div style="color: white; font-size: 1.125rem;">${formatDuration(session.duration)}</div>
+                        </div>
+                        <div>
+                            <div style="color: #9ca3af; font-size: 0.875rem;">Total Students</div>
+                            <div style="color: white; font-size: 1.125rem;">${session.students}</div>
+                        </div>
+                        <div>
+                            <div style="color: #9ca3af; font-size: 0.875rem;">Overall Engagement</div>
+                            <div style="color: #60a5fa; font-size: 1.125rem;">${session.engaged}%</div>
+                        </div>
+                    </div>
+                </div>
+                ${snapshotsHtml}
+                <div class="student-list">
+                    <h3 style="color: #60a5fa; margin-bottom: 1rem;">Student Breakdown</h3>
+                    ${studentsHtml}
+                </div>
+            `;
+            
+            sessionDetails.classList.add('active');
+        }
+    }
+
+    function formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Load sessions on page load
+    loadSessions();
+</script>
+{% endblock %}

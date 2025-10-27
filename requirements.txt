@@ -1,0 +1,8 @@
+Flask
+Flask-SQLAlchemy
+psycopg2-binary
+ultralytics
+opencv-python
+Werkzeug
+onnxruntime
+lap

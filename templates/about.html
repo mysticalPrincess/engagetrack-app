@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% set show_nav = True %}
+{% set active_page = 'about' %}
+
+{% block styles %}
+<style>
+    .about-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .about-title {
+        font-size: 2rem;
+        color: #60a5fa;
+        margin-bottom: 0.5rem;
+    }
+
+    .about-content {
+        line-height: 1.8;
+        color: #d1d5db;
+    }
+
+    .about-content h2 {
+        color: #60a5fa;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .about-content h3 {
+        color: #60a5fa;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .feature-card {
+        background-color: #1f2937;
+        border: 1px solid #374151;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 1rem;
+        color: #60a5fa;
+    }
+
+    .feature-title {
+        color: #60a5fa;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .feature-description {
+        color: #9ca3af;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="about-header">
+        <h1 class="about-title">About EngageTrack</h1>
+    </div>
+
+    <div class="card">
+        <div class="about-content">
+            <p>
+                EngageTrack is a real-time student engagement detection system powered by YOLOv11 deep learning technology. 
+                It helps educators monitor and analyze student engagement during classes, providing valuable insights to improve teaching effectiveness.
+            </p>
+
+            <h2>Key Features</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    <div class="feature-title">Real-Time Detection</div>
+                    <div class="feature-description">Live video analysis with instant feedback on student engagement levels</div>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    </svg>
+                    <div class="feature-title">Student Tracking</div>
+                    <div class="feature-description">Consistent ID assignment for individual student analysis throughout sessions</div>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <div class="feature-title">Smart Alerts</div>
+                    <div class="feature-description">Automatic alerts when sleepy or disengaged students are detected</div>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                    </svg>
+                    <div class="feature-title">Detailed Analytics</div>
+                    <div class="feature-description">Comprehensive reports and historical data for engagement analysis</div>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                    </svg>
+                    <div class="feature-title">Database Storage</div>
+                    <div class="feature-description">PostgreSQL database for reliable data storage and retrieval</div>
+                </div>
+
+                <div class="feature-card">
+                    <svg class="feature-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <div class="feature-title">High Performance</div>
+                    <div class="feature-description">Optimized for fast FPS while maintaining detection accuracy</div>
+                </div>
+            </div>
+
+            <h2>Technology Stack</h2>
+            <ul style="margin-left: 1.5rem; margin-top: 1rem;">
+                <li><strong>YOLOv11:</strong> State-of-the-art object detection for real-time engagement analysis</li>
+                <li><strong>Flask:</strong> Lightweight Python web framework for the backend</li>
+                <li><strong>PostgreSQL:</strong> Robust relational database for data persistence</li>
+                <li><strong>OpenCV:</strong> Computer vision library for video processing</li>
+                <li><strong>SQLAlchemy:</strong> Python SQL toolkit and ORM</li>
+            </ul>
+
+            <h2>How It Works</h2>
+            <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+                <li>The system captures live video feed from your camera</li>
+                <li>YOLOv11 model analyzes each frame to detect students and their engagement states</li>
+                <li>Students are assigned consistent IDs for tracking throughout the session</li>
+                <li>Engagement data is classified as: Engaged, Neutral, Bored, or Sleepy</li>
+                <li>Real-time statistics are displayed and stored in the database</li>
+                <li>Alerts are triggered when concerning patterns are detected</li>
+                <li>Session data is saved for later analysis and reporting</li>
+            </ol>
+
+            <h2>Privacy & Ethics</h2>
+            <p style="margin-top: 1rem;">
+                EngageTrack is designed with privacy in mind. All video processing happens locally, and only engagement 
+                statistics are stored in the database. No video recordings or facial recognition data are saved. 
+                The system should be used transparently with student consent and in accordance with institutional policies.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

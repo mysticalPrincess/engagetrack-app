@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% set show_nav = True %}
+{% set active_page = 'settings' %}
+
+{% block styles %}
+<style>
+    .settings-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .settings-title {
+        font-size: 2rem;
+        color: #60a5fa;
+        margin-bottom: 0.5rem;
+    }
+
+    .settings-grid {
+        display: grid;
+        gap: 1.5rem;
+    }
+
+    .setting-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #374151;
+    }
+
+    .setting-item:last-child {
+        border-bottom: none;
+    }
+
+    .setting-label {
+        color: white;
+        font-weight: 500;
+    }
+
+    .setting-description {
+        color: #9ca3af;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 50px;
+        height: 26px;
+        background-color: #374151;
+        border-radius: 13px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .toggle-switch.active {
+        background-color: #2563eb;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 20px;
+        height: 20px;
+        background-color: white;
+        border-radius: 50%;
+        transition: transform 0.2s;
+    }
+
+    .toggle-switch.active .toggle-slider {
+        transform: translateX(24px);
+    }
+
+    .select-input {
+        padding: 0.5rem 1rem;
+        background-color: #374151;
+        border: 1px solid #4b5563;
+        border-radius: 0.5rem;
+        color: white;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="settings-header">
+        <h1 class="settings-title">Settings</h1>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Detection Settings</div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Confidence Threshold</div>
+                    <div class="setting-description">Minimum confidence for detections</div>
+                </div>
+                <select class="select-input">
+                    <option value="0.3">30%</option>
+                    <option value="0.4">40%</option>
+                    <option value="0.5" selected>50%</option>
+                    <option value="0.6">60%</option>
+                    <option value="0.7">70%</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Alert Threshold</div>
+                    <div class="setting-description">Bored percentage to trigger alerts</div>
+                </div>
+                <select class="select-input">
+                    <option value="20">20%</option>
+                    <option value="30" selected>30%</option>
+                    <option value="40">40%</option>
+                    <option value="50">50%</option>
+                </select>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Sound Alerts</div>
+                    <div class="setting-description">Play sound when sleepy student detected</div>
+                </div>
+                <div class="toggle-switch" onclick="this.classList.toggle('active')">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title">Display Settings</div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Show Student IDs</div>
+                    <div class="setting-description">Display student IDs on bounding boxes</div>
+                </div>
+                <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Show Confidence Scores</div>
+                    <div class="setting-description">Display confidence scores on detections</div>
+                </div>
+                <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Video Quality</div>
+                    <div class="setting-description">Adjust video stream quality</div>
+                </div>
+                <select class="select-input">
+                    <option value="low">Low (Fast)</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High (Slow)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 1.5rem;">
+        <div class="card-title">Database Settings</div>
+        <div class="settings-grid">
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Auto-save Sessions</div>
+                    <div class="setting-description">Automatically save session data to database</div>
+                </div>
+                <div class="toggle-switch active" onclick="this.classList.toggle('active')">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <div>
+                    <div class="setting-label">Data Retention</div>
+                    <div class="setting-description">How long to keep session data</div>
+                </div>
+                <select class="select-input">
+                    <option value="7">7 days</option>
+                    <option value="30" selected>30 days</option>
+                    <option value="90">90 days</option>
+                    <option value="365">1 year</option>
+                    <option value="0">Forever</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
