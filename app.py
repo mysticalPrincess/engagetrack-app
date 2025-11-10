@@ -12,7 +12,7 @@ import os
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Mass2712@localhost:5432/engagetrack'
-app.config['SECRET_KEY'] = 'your-secret-key-change-this' # Make sure to change this in production!
+app.config['SECRET_KEY'] = 'your-secret-key-change-this' 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
