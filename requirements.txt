@@ -6,3 +6,4 @@ opencv-python
 Werkzeug
 onnxruntime
 lap
+mediapipe

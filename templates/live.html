@@ -191,6 +191,12 @@
             </svg>
             Stop Analysis
         </button>
+        <button class="btn" id="poseBtn" onclick="togglePose()" style="background-color: #10b981;">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"/>
+            </svg>
+            <span id="poseBtnText">Pose: ON</span>
+        </button>
     </div>
 </div>
 {% endblock %}
@@ -222,6 +228,24 @@
             if (updateInterval) {
                 clearInterval(updateInterval);
                 updateInterval = null;
+            }
+        }
+    }
+
+    async function togglePose() {
+        const response = await fetch('/toggle_pose', { method: 'POST' });
+        const data = await response.json();
+        
+        if (data.success) {
+            const poseBtn = document.getElementById('poseBtn');
+            const poseBtnText = document.getElementById('poseBtnText');
+            
+            if (data.pose_active) {
+                poseBtn.style.backgroundColor = '#10b981'; // Green
+                poseBtnText.textContent = 'Pose: ON';
+            } else {
+                poseBtn.style.backgroundColor = '#6b7280'; // Gray
+                poseBtnText.textContent = 'Pose: OFF';
             }
         }
     }
